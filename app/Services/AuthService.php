@@ -78,8 +78,8 @@ class AuthService
     {
         $auth = [];
         $user = Auth::user();
-        $auth['access-token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
-        $auth['user']         = $user;
+        $auth          = $user;
+        $auth['access_token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
         return $auth;
     }
 
@@ -91,8 +91,8 @@ class AuthService
     {
         $auth = [];
         $user = User::create($payload);
-        $auth['access-token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
-        $auth['user']         = $user;
+        $auth         = $user;
+        $auth['access_token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
         return $auth;
     }
 }

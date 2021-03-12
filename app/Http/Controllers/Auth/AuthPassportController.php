@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\AuthService;
 use App\Http\Requests\Login\{SignupRequest, LoginRequest};
 use App\Http\Controllers\ResponseController;
-
+use App\Http\Resources\Auth\{AuthLoginResource, AuthSignupResource};
 
 class AuthPassportController extends Controller
 {
@@ -22,7 +22,7 @@ class AuthPassportController extends Controller
         try {
             $user = AuthService::signup($request->all());
             if ($user) {
-                return ResponseController::sendSuccess($user);
+                return ResponseController::sendSuccess(new AuthSignupResource($user));
             }
         } catch (\Exception $e) {
             return  ResponseController::sendError([
@@ -42,7 +42,7 @@ class AuthPassportController extends Controller
             if (!$user) {
                 return  ResponseController::sendError(['credential not found. Verify email and password'], 401);
             }
-            return  ResponseController::sendSuccess($user);
+            return  ResponseController::sendSuccess(new AuthLoginResource($user));
         } catch (\Exception $e) {
             return  ResponseController::sendError([
                 'Error Server ' . $e->getMessage()
@@ -58,7 +58,6 @@ class AuthPassportController extends Controller
      */
     public function logout()
     {
-
         try {
             if (!AuthService::logout()) {
                 return  ResponseController::sendError(['Unauthenticated'], 401);
