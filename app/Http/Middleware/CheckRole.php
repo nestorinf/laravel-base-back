@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class CheckRole
 {
@@ -16,6 +17,21 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next)
     {
+        $roles = Role::get();
+        // $isRolExist = Arr::has($roles->)
+        // if() {
+
+        // }
+        dd($request->user()->roleUser()->roles()->get());
         return $next($request);
+    }
+
+    public function rolesSlug($role = null)
+    {
+        $roleColletion = collect($role);
+        $rolesMap = $roleColletion->map(function ($item, $key) {
+            return $item->slug;
+        });
+        return $rolesMap;
     }
 }

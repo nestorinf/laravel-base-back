@@ -43,6 +43,7 @@ class AuthPassportController extends Controller
                 return  ResponseController::sendError(['credential not found. Verify email and password'], 401);
             }
             return  ResponseController::sendSuccess(new AuthLoginResource($user));
+            // return  ResponseController::sendSuccess($user);
         } catch (\Exception $e) {
             return  ResponseController::sendError([
                 'Error Server ' . $e->getMessage()

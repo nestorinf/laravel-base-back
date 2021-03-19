@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Auth;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Http\Resources\Role\RoleUserResource;
 class AuthLoginResource extends JsonResource
 {
     /**
@@ -25,6 +25,7 @@ class AuthLoginResource extends JsonResource
                 'id'           => $this->id,
                 'name'         => $this->name,
             ],
+            'role_user'       => $this->role,
             'access_token' => $this->access_token
         ];
     }

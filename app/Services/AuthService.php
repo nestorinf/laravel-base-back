@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\RoleUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -79,6 +80,7 @@ class AuthService
         $auth = [];
         $user = Auth::user();
         $auth          = $user;
+        $auth['role'] = self::roleUserInformation($user->id);
         $auth['access_token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
         return $auth;
     }
@@ -94,5 +96,10 @@ class AuthService
         $auth         = $user;
         $auth['access_token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
         return $auth;
+    }
+
+    public static function roleUserInformation($user_id = null)
+    {
+        return RoleUser::with('roles.rolePermissions.permission')->where('user_id', $user_id)->get();
     }
 }
