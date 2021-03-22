@@ -26,8 +26,15 @@ Route::prefix('auth')->group(function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::prefix('v1')->group(function () {
-        Route::group(['middleware' => 'role'],function () {
+
+        Route::group(['middleware' => 'role:ROLE_ROOT,ROLE_ADMIN'],function () {
             Route::resource('countries', CountryController::class);
+        });
+
+        Route::group(['middleware' => 'role:ROLE_ROOT'],function () {
+            Route::get('testing', function () {
+                    return response()->json(['data testing rol access']);
+            });
         });
     });
 });

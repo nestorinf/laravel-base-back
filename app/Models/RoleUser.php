@@ -23,6 +23,6 @@ class RoleUser extends Model
     }
     public function roles()
     {
-        return $this->belongsTo(Role::class,'rol_id','id');
+        return $this->hasMany(Role::class,'rol_id','id');
     }
 }

@@ -15,23 +15,46 @@ class CheckRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, ...$role)
     {
-        $roles = Role::get();
-        // $isRolExist = Arr::has($roles->)
-        // if() {
-
-        // }
-        dd($request->user()->roleUser()->roles()->get());
+        $roleUser = $request->user()->roleUser()->pluck('slug');
+        if (!$this->checkAssignRole($roleUser, $role)) {
+            return response()->json(['error' => 'Unauthorised'], 401);
+        }
         return $next($request);
     }
 
-    public function rolesSlug($role = null)
+    /**
+     * Method checking roles assignment user
+     * @param array $roles
+     * @param array $roleRoute
+     * @return boolean
+     */
+
+    public function checkAssignRole($roles, array $roleRoute)
     {
-        $roleColletion = collect($role);
-        $rolesMap = $roleColletion->map(function ($item, $key) {
-            return $item->slug;
-        });
-        return $rolesMap;
+        foreach ($roles as $rol) {
+            if ($this->hasRole($rol)) {
+                if (in_array($rol, $roleRoute)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * Method check rol exist in collection roles for slug
+     * @param string $slug
+     * @return boolean
+     */
+
+
+    public function hasRole($slug = null)
+    {
+        $role = Role::where('slug', $slug)->first();
+        if (!$role) {
+            return false;
+        }
+        return true;
     }
 }
